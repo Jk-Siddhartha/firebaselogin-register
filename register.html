@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Firebase Login Register</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="main-div">
+      <div class="navbar">
+        <a href="./index.html" class="Navlink logo"> Siddhartha </a>
+        <div class="nav-links">
+          <a href="./login.html" class="Navlink btn login"> Login </a>
+          <a href="./register.html" class="Navlink btn register"> Register </a>
+        </div>
+      </div>
+      <div class="register-page">
+        <div class="register-page-container">
+          <img
+            src="https://images.pexels.com/photos/3127880/pexels-photo-3127880.jpeg?auto=compress&cs=tinysrgb&w=600"
+            alt="regisgter-img"
+            class="register-hero-img"
+          />
+          <div class="register-page-fields">
+            <img
+              src="https://cdn-icons-png.flaticon.com/128/2921/2921222.png"
+              alt="register-logo"
+              class="register-logo"
+            />
+            <input type="text" name="name" id="name" placeholder="Name..." />
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Email..."
+            />
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Username..."
+            />
+            <input
+              type="number"
+              name="phone"
+              id="phone"
+              placeholder="Phone..."
+            />
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password..."
+            />
+            <input
+              type="password"
+              name="cpassword"
+              id="cpassword"
+              placeholder="Confirm Password..."
+            />
+            <button class="btn register register-btn">Register</button>
+            <p>
+              Already registered login here ...
+              <a href="./login.html">Click Here</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.11.0/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDzywQHxfKpKprfK7TKMlXc_ESr44LuSD0",
+      authDomain: "login-register-db-74c53.firebaseapp.com",
+      databaseURL:
+        "https://login-register-db-74c53-default-rtdb.firebaseio.com",
+      projectId: "login-register-db-74c53",
+      storageBucket: "login-register-db-74c53.appspot.com",
+      messagingSenderId: "1029969309035",
+      appId: "1:1029969309035:web:ced9c711ec74a7a5bfb02e",
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    import {
+      getDatabase,
+      ref,
+      set,
+      child,
+      get,
+    } from "https://www.gstatic.com/firebasejs/9.11.0/firebase-database.js";
+
+    const db = getDatabase();
+
+    const email = document.getElementById("email");
+    const Name = document.getElementById("name");
+    const username = document.getElementById("username");
+    const phone = document.getElementById("phone");
+    const password = document.getElementById("password");
+    const cpassword = document.getElementById("cpassword");
+    const register = document.querySelector(".register-btn");
+
+    function registerUser() {
+      if (
+        !email.value ||
+        !Name.value ||
+        !username.value ||
+        !phone.value ||
+        !password.value ||
+        !cpassword.value
+      ) {
+        alert("Fields are empty!!");
+      } else {
+        if (password.value !== cpassword.value) {
+          alert("Password & Confirm Password are not matching");
+        } else {
+          const dbRef = ref(db);
+
+          get(child(dbRef, "Users/" + username.value)).then((data) => {
+            if (data.exists()) {
+              alert("Account Already Exist!");
+            } else {
+              set(ref(db, "Users/" + username.value), {
+                Name: Name.value,
+                email: email.value,
+                username: username.value,
+                phone: phone.value,
+                password: password.value,
+                cpassword: cpassword.value,
+              })
+                .then(() => {
+                  alert("User Registered Successfully!!");
+                  window.location = "login.html";
+                })
+                .catch((err) => {
+                  alert(err);
+                });
+            }
+          });
+        }
+      }
+    }
+
+    register.addEventListener("click", registerUser);
+  </script>
+</html>

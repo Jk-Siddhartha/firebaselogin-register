@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Register Firebase</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="main-div">
+      <div class="navbar">
+        <a href="./index.html" class="Navlink logo"> Siddhartha </a>
+        <div class="nav-links">
+          <a href="./login.html" class="Navlink btn login"> Login </a>
+          <a href="./register.html" class="Navlink btn register"> Register </a>
+        </div>
+      </div>
+      <div class="login-page">
+        <div class="login-page-container">
+          <img
+            src="https://images.pexels.com/photos/3585090/pexels-photo-3585090.jpeg?auto=compress&cs=tinysrgb&w=600"
+            alt="login-img"
+            class="login-hero-img"
+          />
+          <div class="login-page-fields">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/1177/1177568.png"
+              alt="login-img"
+              class="login-logo"
+            />
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Username..."
+            />
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password..."
+            />
+            <button class="btn login login-btn">Login</button>
+            <p>
+              Not registered Yet..
+              <a href="./register.html" class="Navlink"> Click Here </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.11.0/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDzywQHxfKpKprfK7TKMlXc_ESr44LuSD0",
+      authDomain: "login-register-db-74c53.firebaseapp.com",
+      databaseURL:
+        "https://login-register-db-74c53-default-rtdb.firebaseio.com",
+      projectId: "login-register-db-74c53",
+      storageBucket: "login-register-db-74c53.appspot.com",
+      messagingSenderId: "1029969309035",
+      appId: "1:1029969309035:web:ced9c711ec74a7a5bfb02e",
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    import {
+      getDatabase,
+      ref,
+      set,
+      child,
+      get,
+    } from "https://www.gstatic.com/firebasejs/9.11.0/firebase-database.js";
+
+    const db = getDatabase();
+
+    const username = document.getElementById("username");
+    const password = document.getElementById("password");
+    const loginBtn = document.querySelector(".login-btn");
+
+    function loginUser() {
+      if (!username.value || !password.value) {
+        alert("Fields are empty!!");
+      } else {
+        const dbref = ref(db);
+
+        get(child(dbref, "Users/" + username.value)).then((data) => {
+          if (data.exists()) {
+            let dbpass = data.val().password;
+            if (dbpass == password.value) {
+              login(data.val());
+            } else {
+              alert("Invalid Credentials !!");
+            }
+          } else {
+            alert("Invalid Credentials !!");
+          }
+        });
+      }
+    }
+
+    function login(user) {
+      localStorage.setItem("user", JSON.stringify(user));
+      window.location = "home.html";
+    }
+
+    loginBtn.addEventListener("click", loginUser);
+  </script>
+</html>

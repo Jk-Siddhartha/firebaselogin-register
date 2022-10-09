@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Register Firebase</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="main-div">
+      <div class="navbar">
+        <a href="./home.html" class="Navlink logo"> Siddhartha </a>
+        <div class="nav-links"></div>
+      </div>
+      <div class="hero-section">
+        <h1>Welcome to <span>Firebase Project</span> Login & Register Page</h1>
+        <h2 class="title"></h2>
+      </div>
+    </div>
+  </body>
+  <script>
+    const title = document.querySelector(".title");
+    const navLinks = document.querySelector(".nav-links");
+
+    var currUser = null;
+
+    function getUser() {
+      if (localStorage.getItem("user") != null) {
+        currUser = JSON.parse(localStorage.getItem("user"));
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("user");
+      window.location = "login.html";
+    }
+
+    window.onload = function () {
+      getUser();
+      if (currUser == null) {
+        title.innerHTML = "Please Create Your Accound";
+        navLinks.innerHTML = `<a href="./login.html" class="Navlink btn login"> Login </a>
+          <a href="./register.html" class="Navlink btn register"> Register </a>`;
+      } else {
+        title.innerHTML = `Welcome Mr. <span>${currUser.Name}</span>`;
+        navLinks.innerHTML = `<a href="./login.html" class="Navlink btn login" onclick="logout()"> Logout </a>`;
+      }
+    };
+  </script>
+</html>
